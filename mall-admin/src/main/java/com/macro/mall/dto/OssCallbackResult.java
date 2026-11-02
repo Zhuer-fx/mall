@@ -1,60 +1,24 @@
 package com.macro.mall.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * oss上传文件的回调结果
+ * OSS上传文件的回调结果
  * Created by macro on 2018/5/17.
  */
+@Data
+@EqualsAndHashCode
 public class OssCallbackResult {
-    @ApiModelProperty("文件名称")
+    @Schema(title = "文件名称")
     private String filename;
-    @ApiModelProperty("文件大小")
+    @Schema(title = "文件大小")
     private String size;
-    @ApiModelProperty("文件的mimeType")
+    @Schema(title = "文件的mimeType")
     private String mimeType;
-    @ApiModelProperty("图片文件的宽")
+    @Schema(title = "图片文件的宽")
     private String width;
-    @ApiModelProperty("图片文件的高")
+    @Schema(title = "图片文件的高")
     private String height;
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getMimeType() {
-        return mimeType;
-    }
-
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    public String getWidth() {
-        return width;
-    }
-
-    public void setWidth(String width) {
-        this.width = width;
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public void setHeight(String height) {
-        this.height = height;
-    }
 }

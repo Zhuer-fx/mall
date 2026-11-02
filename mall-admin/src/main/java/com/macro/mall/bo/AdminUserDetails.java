@@ -1,7 +1,7 @@
 package com.macro.mall.bo;
 
 import com.macro.mall.model.UmsAdmin;
-import com.macro.mall.model.UmsPermission;
+import com.macro.mall.model.UmsResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,23 +11,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * SpringSecurity需要的用户详情
+ * SpringSecurity需要的用户信息封装类
  * Created by macro on 2018/4/26.
  */
 public class AdminUserDetails implements UserDetails {
-    private UmsAdmin umsAdmin;
-    private List<UmsPermission> permissionList;
-    public AdminUserDetails(UmsAdmin umsAdmin,List<UmsPermission> permissionList) {
+    //后台用户
+    private final UmsAdmin umsAdmin;
+    //拥有资源列表
+    private final List<UmsResource> resourceList;
+
+    public AdminUserDetails(UmsAdmin umsAdmin,List<UmsResource> resourceList) {
         this.umsAdmin = umsAdmin;
-        this.permissionList = permissionList;
+        this.resourceList = resourceList;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //返回当前用户的权限
-        return permissionList.stream()
-                .filter(permission -> permission.getValue()!=null)
-                .map(permission ->new SimpleGrantedAuthority(permission.getValue()))
+        //返回当前用户所拥有的资源
+        return resourceList.stream()
+                .map(resource ->new SimpleGrantedAuthority(resource.getId()+":"+resource.getName()))
                 .collect(Collectors.toList());
     }
 

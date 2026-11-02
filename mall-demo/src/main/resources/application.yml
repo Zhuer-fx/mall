@@ -2,8 +2,10 @@ server:
   port: 8082
 
 spring:
+  application:
+    name: mall-demo
   datasource:
-    url: jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
     username: root
     password: root
   thymeleaf:
@@ -12,6 +14,9 @@ spring:
     servlet:
       content-type: text/html
     cache: false #开发时关闭缓存,不然没法看到实时页面
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 mybatis:
   mapper-locations:
@@ -20,11 +25,26 @@ mybatis:
 
 logging:
   level:
-    root: info #日志配置DEBUG,INFO,WARN,ERROR
+    root: info
     com.macro.mall: debug
-#  file: demo_log.log #配置日志生成路径
-#  path: /var/logs #配置日志文件名称
 
 host:
   mall:
    admin: http://localhost:8080
+
+springdoc:
+  swagger-ui:
+    # 修改Swagger UI路径
+    path: /swagger-ui.html
+    # 开启Swagger UI界面
+    enabled: true
+    # 用于配置tag和operation的展开方式，这里配置为都不展开
+    doc-expansion: 'none'
+  api-docs:
+    # 修改api-docs路径
+    path: /v3/api-docs
+    # 开启api-docs
+    enabled: true
+  group-configs:
+    - group: 'mall-demo'
+      packages-to-scan: com.macro.mall.demo.controller

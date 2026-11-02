@@ -1,5 +1,6 @@
 package com.macro.mall.portal.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.macro.mall.mapper.OmsCartItemMapper;
 import com.macro.mall.model.OmsCartItem;
 import com.macro.mall.model.OmsCartItemExample;
@@ -13,11 +14,11 @@ import com.macro.mall.portal.service.UmsMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 购物车管理Service实现类
@@ -60,14 +61,8 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
         OmsCartItemExample example = new OmsCartItemExample();
         OmsCartItemExample.Criteria criteria = example.createCriteria().andMemberIdEqualTo(cartItem.getMemberId())
                 .andProductIdEqualTo(cartItem.getProductId()).andDeleteStatusEqualTo(0);
-        if (!StringUtils.isEmpty(cartItem.getSp1())) {
-            criteria.andSp1EqualTo(cartItem.getSp1());
-        }
-        if (!StringUtils.isEmpty(cartItem.getSp2())) {
-            criteria.andSp2EqualTo(cartItem.getSp2());
-        }
-        if (!StringUtils.isEmpty(cartItem.getSp3())) {
-            criteria.andSp3EqualTo(cartItem.getSp3());
+        if (cartItem.getProductSkuId()!=null) {
+            criteria.andProductSkuIdEqualTo(cartItem.getProductSkuId());
         }
         List<OmsCartItem> cartItemList = cartItemMapper.selectByExample(example);
         if (!CollectionUtils.isEmpty(cartItemList)) {
@@ -84,8 +79,11 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
     }
 
     @Override
-    public List<CartPromotionItem> listPromotion(Long memberId) {
+    public List<CartPromotionItem> listPromotion(Long memberId, List<Long> cartIds) {
         List<OmsCartItem> cartItemList = list(memberId);
+        if(CollUtil.isNotEmpty(cartIds)){
+            cartItemList = cartItemList.stream().filter(item->cartIds.contains(item.getId())).collect(Collectors.toList());
+        }
         List<CartPromotionItem> cartPromotionItemList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(cartItemList)){
             cartPromotionItemList = promotionService.calcCartPromotion(cartItemList);

@@ -1,48 +1,26 @@
 package com.macro.mall.portal.domain;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.util.List;
+
 /**
  * 生成订单时传入的参数
  * Created by macro on 2018/8/30.
  */
+@Data
+@EqualsAndHashCode
 public class OrderParam {
-    //收货地址id
+    @Schema(title = "收货地址ID")
     private Long memberReceiveAddressId;
-    //优惠券id
+    @Schema(title = "优惠券ID")
     private Long couponId;
-    //使用的积分数
+    @Schema(title = "使用的积分数")
     private Integer useIntegration;
-    //支付方式
+    @Schema(title = "支付方式")
     private Integer payType;
-
-    public Long getMemberReceiveAddressId() {
-        return memberReceiveAddressId;
-    }
-
-    public void setMemberReceiveAddressId(Long memberReceiveAddressId) {
-        this.memberReceiveAddressId = memberReceiveAddressId;
-    }
-
-    public Long getCouponId() {
-        return couponId;
-    }
-
-    public void setCouponId(Long couponId) {
-        this.couponId = couponId;
-    }
-
-    public Integer getPayType() {
-        return payType;
-    }
-
-    public void setPayType(Integer payType) {
-        this.payType = payType;
-    }
-
-    public Integer getUseIntegration() {
-        return useIntegration;
-    }
-
-    public void setUseIntegration(Integer useIntegration) {
-        this.useIntegration = useIntegration;
-    }
+    @Schema(title = "被选中的购物车商品ID")
+    private List<Long> cartIds;
 }

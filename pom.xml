@@ -22,39 +22,42 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.7.RELEASE</version>
+        <version>3.5.14</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <skipTests>true</skipTests>
         <docker.host>http://192.168.3.101:2375</docker.host>
-        <docker.maven.plugin.version>1.1.0</docker.maven.plugin.version>
-        <pagehelper-starter.version>1.2.10</pagehelper-starter.version>
-        <pagehelper.version>5.1.8</pagehelper.version>
-        <druid.version>1.1.10</druid.version>
-        <hutool.version>4.5.7</hutool.version>
-        <swagger2.version>2.7.0</swagger2.version>
-        <mybatis-generator.version>1.3.7</mybatis-generator.version>
-        <mybatis.version>3.4.6</mybatis.version>
-        <mysql-connector.version>8.0.15</mysql-connector.version>
-        <spring-data-commons.version>2.1.5.RELEASE</spring-data-commons.version>
-        <jjwt.version>0.9.0</jjwt.version>
-        <aliyun-oss.version>2.5.0</aliyun-oss.version>
-        <logstash-logback.version>4.8</logstash-logback.version>
+        <docker.maven.plugin.version>0.45.1</docker.maven.plugin.version>
+        <pagehelper-starter.version>2.1.1</pagehelper-starter.version>
+        <pagehelper.version>6.1.1</pagehelper.version>
+        <druid.version>1.2.24</druid.version>
+        <hutool.version>5.8.40</hutool.version>
+        <springdoc-openapi.version>2.8.17</springdoc-openapi.version>
+        <mybatis-generator.version>1.4.2</mybatis-generator.version>
+        <mybatis.version>3.5.19</mybatis.version>
+        <mybatis-spring-boot-starter.version>3.0.4</mybatis-spring-boot-starter.version>
+        <mysql-connector.version>9.3.0</mysql-connector.version>
+        <spring-data-commons.version>3.5.11</spring-data-commons.version>
+        <aliyun-oss.version>3.18.5</aliyun-oss.version>
+        <alipay-sdk.version>4.40.630.ALL</alipay-sdk.version>
+        <logstash-logback.version>8.0</logstash-logback.version>
+        <minio.version>8.6.0</minio.version>
+        <okhttp3.version>5.1.0</okhttp3.version>
         <mall-common.version>1.0-SNAPSHOT</mall-common.version>
         <mall-mbg.version>1.0-SNAPSHOT</mall-mbg.version>
         <mall-security.version>1.0-SNAPSHOT</mall-security.version>
+        <commons-lang3.version>3.20.0</commons-lang3.version>
+        <bouncycastle.version>1.84</bouncycastle.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -69,13 +72,19 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -104,6 +113,12 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper-starter.version}</version>
             </dependency>
+            <!--MyBatis的Starter依赖-->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
             <!--MyBatis分页插件-->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
@@ -113,7 +128,7 @@
             <!--集成druid连接池-->
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
                 <version>${druid.version}</version>
             </dependency>
             <!--Hutool Java工具包-->
@@ -122,16 +137,11 @@
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
             </dependency>
-            <!--Swagger-UI API文档生产工具-->
+            <!--SpringDoc相关依赖-->
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger2.version}</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi.version}</version>
             </dependency>
             <!-- MyBatis 生成器 -->
             <dependency>
@@ -147,8 +157,8 @@
             </dependency>
             <!--Mysql数据库驱动-->
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql-connector.version}</version>
             </dependency>
             <!--SpringData工具包-->
@@ -157,12 +167,7 @@
                 <artifactId>spring-data-commons</artifactId>
                 <version>${spring-data-commons.version}</version>
             </dependency>
-            <!--JWT(Json Web Token)登录支持-->
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
-                <version>${jjwt.version}</version>
-            </dependency>
+
             <!-- 阿里云OSS -->
             <dependency>
                 <groupId>com.aliyun.oss</groupId>
@@ -175,7 +180,128 @@
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>${logstash-logback.version}</version>
             </dependency>
+            <!--MinIO JAVA SDK-->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+            <!--Apache Commons Lang3-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <!--Bouncy Castle加密库-->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
+            <!--OkHttp JVM-->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp-jvm</artifactId>
+                <version>${okhttp3.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker.maven.plugin.version}</version>
+                        <executions>
+                            <!--如果想在项目打包时构建镜像添加-->
+                            <execution>
+                                <id>build-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    <configuration>
+                        <!-- Docker 远程管理地址-->
+                        <dockerHost>${docker.host}</dockerHost>
+                        <images>
+                            <image>
+                                <!--定义镜像名称-->
+                                <name>mall/${project.name}:${project.version}</name>
+                                <!--定义镜像构建行为-->
+                                <build>
+                                    <!--定义基础镜像-->
+                                    <from>openjdk:17</from>
+                                    <args>
+                                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                                    </args>
+                                    <!--定义哪些文件拷贝到容器中-->
+                                    <assembly>
+                                        <!--定义拷贝到容器的目录-->
+                                        <targetDir>/</targetDir>
+                                        <!--只拷贝生成的jar包-->
+                                        <descriptorRef>artifact</descriptorRef>
+                                    </assembly>
+                                    <!--定义容器启动命令-->
+                                    <entryPoint>["java", "-jar","-Dspring.profiles.active=prod","/${project.build.finalName}.jar"]</entryPoint>
+                                    <!--定义维护者-->
+                                    <maintainer>macrozheng</maintainer>
+                                </build>
+                            </image>
+                        </images>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!--解决SpringBoot 3.2 Parameter Name Retention 问题-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!--使用aliyun的镜像源提升依赖下载速度-->
+    <repositories>
+        <repository>
+            <id>aliyunmaven</id>
+            <name>aliyun</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+        <repository>
+            <id>central2</id>
+            <name>central2</name>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
+
+    <!--使用aliyun的镜像源提升插件下载速度-->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>aliyunmaven</id>
+            <name>aliyun</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>central2</id>
+            <name>central2</name>
+            <url>https://repo1.maven.org/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
